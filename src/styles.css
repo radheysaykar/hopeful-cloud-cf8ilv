@@ -1,0 +1,9 @@
+.App {
+  font-family: sans-serif;
+  text-align: center;
+}
+#usercalleries {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+}
