@@ -25,13 +25,12 @@ export default class CreateExercise extends Component {
   onChangeUsername(e) {
     window.location = "/userDetails/" + e.target.value;
   }
- 
+
   render() {
     return (
       <div className="form-group">
-        
         <label>User name:</label>
-        <br/>
+        <br />
         <select
           ref="userInput"
           required
@@ -39,7 +38,6 @@ export default class CreateExercise extends Component {
           value={this.state.username}
           onChange={this.onChangeUsername}
         >
-          
           {this.state.users.map(function (user) {
             return (
               <option key={user} value={user}>
@@ -48,7 +46,7 @@ export default class CreateExercise extends Component {
             );
           })}
         </select>
-        <br/>
+        <br />
       </div>
     );
   }
