@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { useParams } from "react-router-dom";
-import axios from "axios";
+import api from "../api/posts.js";
 
 class EditExercise extends Component {
   constructor(props) {
@@ -21,30 +21,31 @@ class EditExercise extends Component {
   }
 
   componentDidMount() {
-    axios
-      .get("https://cf8ilv-5000.csb.app/exercises/" + this.props.id.id)
+    api
+      .get("/exercises/" + this.props.id.id)
       .then((res) => {
         this.setState({
           username: res.data.username,
           exercisename: res.data.exercisename,
           duration: res.data.duration,
         });
-      });
+      }).catch((err) => console.log(err));
 
-    axios.get("https://cf8ilv-5000.csb.app/users/").then((res) => {
+    api.get("/users/").then((res) => {
       if (res.data.length > 0) {
         this.setState({
           users: res.data.map((user) => user.username),
         });
       }
-    });
-    axios.get("https://cf8ilv-5000.csb.app/exercisetypes/").then((res) => {
+    }).catch((err) => console.log(err));
+    
+    api.get("/exercisetypes/").then((res) => {
       if (res.data.length > 0) {
         this.setState({
           exercisetypes: res.data,
         });
       }
-    });
+    }).catch((err) => console.log(err));
   }
 
   onChangeUsername(e) {
@@ -65,7 +66,7 @@ class EditExercise extends Component {
     });
   }
 
-  onSubmit(e) {
+  async onSubmit(e) {
     e.preventDefault();
 
     const exercise = {
@@ -76,12 +77,12 @@ class EditExercise extends Component {
 
     console.log(exercise);
 
-    axios
+    await api
       .post(
-        "https://cf8ilv-5000.csb.app/exercises/update/" + this.props.id.id,
+        "/exercises/update/" + this.props.id.id,
         exercise
       )
-      .then((res) => console.log(res.data));
+      .then((res) => console.log(res.data)).catch((err) => console.log(err));
 
     window.location = "/";
   }

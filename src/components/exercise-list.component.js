@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
+import api from "../api/posts.js";
 
 const Exercise = (props) => {
   return (
@@ -10,9 +10,9 @@ const Exercise = (props) => {
           {props.exercise.username}
         </Link>
       </td>
-      <td>{props.exercise.description}</td>
+      <td>{props.exercise.exercisename}</td>
       <td>{props.exercise.duration}</td>
-      <td>{props.exercise.date.substring(0, 10)} </td>
+      {/* <td>{props.exercise.date.substring(0, 10)} </td> */}
       <td>
         <Link to={"/edit/" + props.exercise._id}>edit</Link> |
         <a
@@ -58,22 +58,22 @@ export default class ExercisesList extends Component {
   }
 
   componentDidMount() {
-    axios.get("https://cf8ilv-5000.csb.app/exercises/").then((res) => {
+    api.get("/exercises/").then((res) => {
       this.setState({
         exercises: res.data,
       });
       console.log("Hi");
       console.log(this.state.exercises);
-    });
+    }).catch((err) => console.log(err));
   }
 
   deleteExercise(id) {
-    axios.delete("https://cf8ilv-5000.csb.app/exercises/" + id).then((res) => {
+    api.delete("/exercises/" + id).then((res) => {
       console.log(res.data);
       this.setState({
         exercises: this.state.exercises.filter((el) => el._id !== id),
       });
-    });
+    }).catch((err) => console.log(err));
   }
 
   exerciseList() {
@@ -99,7 +99,6 @@ export default class ExercisesList extends Component {
               <th>Username</th>
               <th>Description</th>
               <th>Duration</th>
-              <th>Date</th>
               <th>Actions</th>
             </tr>
           </thead>

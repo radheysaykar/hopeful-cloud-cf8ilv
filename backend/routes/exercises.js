@@ -8,27 +8,6 @@ router.route("/").get((req, res) => {
     .catch((err) => res.status(400).json("Error: " + err));
 });
 
-// router.route("/add").post((req, res) => {
-//   const username = req.body.username;
-//   const exercisename = req.body.exercisename;
-//   const duration = Number(req.body.duration);
-//   let execisetype = Exercise.findOne({
-//     exercisename: req.body.exercisename,
-//   });
-//   const calories = (execisetype.duration * duration) / 15;
-//   const done = false;
-//   const newExercise = new Exercise({
-//     username,
-//     exercisename,
-//     duration,
-//     calories,
-//     done,
-//   });
-//   newExercise
-//     .save()
-//     .then(() => res.json("exercise added"))
-//     .catch((err) => res.status(400).json("Eror: " + username));
-// });
 router.post("/add", async (req, res) => {
   try {
     const username = req.body.username;
@@ -82,36 +61,17 @@ router.post("/update/:id", async (req, res) => {
     exercise.username = req.body.username;
     exercise.exercisename = req.body.exercisename;
     exercise.duration = Number(req.body.duration);
+    if(req.body.done) exercise.done = Boolean(req.body.done);
+    else exercise.done = false;
     let execisetype = await ExerciseTypes.findOne({
       exercisename: req.body.exercisename,
     });
     exercise.calories = (execisetype.calper15 * exercise.duration) / 15;
-    exercise.done = false;
     const savedData = await exercise.save();
     res.status(201).json(savedData);
   } catch (err) {
-    res.status(400).json("Eror: " + err);
+    res.status(400).json("Error: " + err);
   }
 });
-
-// router.route("/update/:id").post((req, res) => {
-//   Exercise.findById(req.params.id)
-//     .then((exercise) => {
-//       exercise.username = req.body.username;
-//       exercise.exercisename = req.body.exercisename;
-//       exercise.duration = Number(req.body.duration);
-//       const exercisetype = ExerciseTypes.findOne({
-//         exercisename: exercise.exercisename,
-//       });
-//       exercise.calories = (exercise.duration / 15) * exercisetype.calper15;
-//       exercise.done = false;
-
-//       exercise
-//         .save()
-//         .then(() => res.json("exercise updated"))
-//         .catch((err) => res.status(400).json("Error: " + err));
-//     })
-//     .catch((err) => res.status(400).json("Error: " + err));
-// });
 
 module.exports = router;

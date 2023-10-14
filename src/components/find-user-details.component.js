@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import axios from "axios";
+import api from "../api/posts.js";
 
 export default class CreateExercise extends Component {
   constructor(props) {
@@ -13,13 +13,13 @@ export default class CreateExercise extends Component {
   }
 
   componentDidMount() {
-    axios.get("https://cf8ilv-5000.csb.app/users/").then((res) => {
+    api.get("/users/").then((res) => {
       if (res.data.length > 0) {
         this.setState({
           users: res.data.map((user) => user.username),
         });
       }
-    });
+    }).catch((err) => console.log(err));
   }
 
   onChangeUsername(e) {

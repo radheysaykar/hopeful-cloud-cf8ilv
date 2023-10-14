@@ -1,10 +1,9 @@
 import React, { Component } from "react";
-import axios from "axios";
+import api from "../api/posts.js";
 
 export default class CreateUser extends Component {
   constructor(props) {
     super(props);
-
     this.onChangeUsername = this.onChangeUsername.bind(this);
     this.onChangeCalgoal = this.onChangeCalgoal.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
@@ -43,11 +42,19 @@ export default class CreateUser extends Component {
       calgoal: this.state.calgoal,
     };
 
-    console.log(user);
+    console.log(user); 
 
-    axios
-      .post("https://cf8ilv-5000.csb.app/users/add", user)
-      .then((res) => console.log(res.data));
+    api
+      .post("/users/add", user)
+      .then((res) => console.log(res.data)).catch((err) => console.log(err));
+    
+      api
+      .post("/exercises/add", {
+        "username": "radhey",
+                "exercisename": "running",
+                "duration": 99
+        })
+      .then((res) => console.log(res.data)).catch((err) => console.log(err));    
 
     this.setState({
       username: "",
@@ -74,7 +81,7 @@ export default class CreateUser extends Component {
           </div>
           <br/>
           <div className="form-group">
-            <label>calleries goal: </label>
+            <label>calories goal: </label>
             <input
               type="text"
               required
