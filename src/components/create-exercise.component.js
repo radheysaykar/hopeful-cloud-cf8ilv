@@ -5,7 +5,6 @@ export default class CreateExercise extends Component {
   constructor(props) {
     super(props);
 
-    this.onChangeUsername = this.onChangeUsername.bind(this);
     this.onChangeExercisename = this.onChangeExercisename.bind(this);
     this.onChangeDuration = this.onChangeDuration.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
@@ -14,20 +13,15 @@ export default class CreateExercise extends Component {
       username: "",
       exercisename: "",
       duration: 0,
-      users: [],
       exercisetypes: [],
     };
   }
 
   async componentDidMount() {
-    await api.get("/users/").then((res) => {
-      if (res.data.length > 0) {
-        this.setState({
-          users: res.data.map((user) => user.username),
-        });
-      }
-    }).catch((err) => console.log(err));
-    
+    this.setState({
+      username: this.props.username,
+    });
+
     await api.get("/exercisetypes/").then((res) => {
       if (res.data.length > 0) {
         this.setState({
@@ -35,12 +29,6 @@ export default class CreateExercise extends Component {
         });
       }
     }).catch((err) => console.log(err));
-  }
-
-  onChangeUsername(e) {
-    this.setState({
-      username: e.target.value,
-    });
   }
 
   onChangeExercisename(e) {
@@ -64,7 +52,7 @@ export default class CreateExercise extends Component {
       duration: this.state.duration,
     };
 
-    console.log(exercise);
+    console.log("exercise of that user ", exercise);
 
     await api
     .post("/exercises/add", exercise)
@@ -78,24 +66,6 @@ export default class CreateExercise extends Component {
       <div>
         <h3>Create new exercise log</h3>
         <form onSubmit={this.onSubmit}>
-          <div className="form-group">
-            <label>User name:</label>
-            <select
-              ref="userInput"
-              required
-              className="form-control"
-              value={this.state.username}
-              onChange={this.onChangeUsername}
-            >
-              {this.state.users.map(function (user) {
-                return (
-                  <option key={user} value={user}>
-                    {user}
-                  </option>
-                );
-              })}
-            </select>
-          </div>
         <br/>
           <div className="form-group">
             <label>

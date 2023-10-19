@@ -1,10 +1,10 @@
-import React, { Component } from "react";
-import { Link, useParams } from "react-router-dom";
+import React, { Component, useState, useEffect} from "react";
+import { Link } from "react-router-dom";
 import api from "../api/posts.js";
 
 
 
-class ExercisesList extends Component {
+class UserDetaills extends Component {
   constructor(props) {
     super(props);
 
@@ -18,22 +18,23 @@ class ExercisesList extends Component {
   }
 
   componentDidMount() {
+    console.log("this.props.username", this.props.username);
     api
       .get(
         "/exercises/find/" +
-          this.props.username.username
+          this.props.username
       )
       .then((res) => {
         this.setState({
           exercises: res.data,
         });
-        console.log("exercise" + this.props.username.username);
+        console.log("exercise" + this.props.username);
       }).catch((err) => console.log(err));
   
     api
       .get(
         "/users/" +
-          this.props.username.username
+          this.props.username
       )
       .then((res) => {
         this.setState({
@@ -81,7 +82,12 @@ class ExercisesList extends Component {
     }
   }
 
-   Exercise = (exercise) => {
+  signOut(){
+    localStorage.removeItem('username');
+    window.location = "/"
+  }
+
+  Exercise = (exercise) => {
     return (
       <tr>
         <td>{exercise.exercisename}</td>
@@ -127,7 +133,11 @@ class ExercisesList extends Component {
   render() {
     return (
       <div>
-        <h1>{this.props.username.username}'s schedule:</h1>
+        <a 
+            href="#"
+            onClick={() => {this.signOut()}}
+          >sign out</a>
+        <h1>{this.props.username}'s schedule:</h1>
         <h3 style={{ textAlign: 'right' }}>calories goal completed:{this.state.user.calgoal_completed}/{this.state.user.calgoal} <Link to={"/create/"}>➕</Link></h3>
         <table className="table">
           <thead className="thead-light">
@@ -145,9 +155,5 @@ class ExercisesList extends Component {
     );
   }
 }
-
-const UserDetaills = () => {
-  return <ExercisesList username={useParams()} />;
-};
 
 export default UserDetaills;

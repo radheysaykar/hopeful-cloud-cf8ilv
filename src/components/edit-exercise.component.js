@@ -6,7 +6,6 @@ class EditExercise extends Component {
   constructor(props) {
     super(props);
 
-    this.onChangeUsername = this.onChangeUsername.bind(this);
     this.onChangeExercisename = this.onChangeExercisename.bind(this);
     this.onChangeDuration = this.onChangeDuration.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
@@ -15,29 +14,24 @@ class EditExercise extends Component {
       username: "",
       exercisename: "",
       duration: 0,
-      users: [],
-      exercisetypes: [],
+      exercisetypes: []
     };
   }
 
   componentDidMount() {
+    console.log(" this.props.id ", String(this.props.id.id));
+    this.setState({
+      username: this.props.username,
+    });
+
     api
       .get("/exercises/" + this.props.id.id)
       .then((res) => {
         this.setState({
-          username: res.data.username,
           exercisename: res.data.exercisename,
           duration: res.data.duration,
         });
       }).catch((err) => console.log(err));
-
-    api.get("/users/").then((res) => {
-      if (res.data.length > 0) {
-        this.setState({
-          users: res.data.map((user) => user.username),
-        });
-      }
-    }).catch((err) => console.log(err));
     
     api.get("/exercisetypes/").then((res) => {
       if (res.data.length > 0) {
@@ -46,12 +40,6 @@ class EditExercise extends Component {
         });
       }
     }).catch((err) => console.log(err));
-  }
-
-  onChangeUsername(e) {
-    this.setState({
-      username: e.target.value,
-    });
   }
 
   onChangeExercisename(e) {
@@ -91,25 +79,6 @@ class EditExercise extends Component {
       <div>
         <h3>Edit exercise log</h3>
         <form onSubmit={this.onSubmit}>
-          <div className="form-group">
-            <label>User name:</label>
-            <select
-              ref="userInput"
-              required
-              className="form-control"
-              value={this.state.username}
-              onChange={this.onChangeUsername}
-            >
-              {this.state.users.map(function (user) {
-                return (
-                  <option key={user} value={user}>
-                    {user}
-                  </option>
-                );
-              })}
-            </select>
-          </div>
-
           <div className="form-group">
             <label>
               Exercise name:
@@ -159,8 +128,8 @@ class EditExercise extends Component {
   }
 }
 
-const ParentEditExercise = () => {
-  return <EditExercise id={useParams()} />;
+const ParentEditExercise = (props) => {
+  return <EditExercise id={useParams()} username={props.username}/>;
 };
 
 export default ParentEditExercise;
