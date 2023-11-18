@@ -2,11 +2,13 @@ import React, { Component, useState, useEffect} from "react";
 import { Link } from "react-router-dom";
 import api from "../api/posts.js";
 
+import { AssertionComponent } from '../function.js';
 
 
 class UserDetaills extends Component {
   constructor(props) {
     super(props);
+
 
     // this.deleteExercise = this.deleteExercise.bind(this);
     // this.markAsDone = this.markAsDone.bind(this);
@@ -16,8 +18,8 @@ class UserDetaills extends Component {
       user: {}
     };
   }
-
   componentDidMount() {
+
     console.log("this.props.username", this.props.username);
     api
       .get(
@@ -94,12 +96,13 @@ class UserDetaills extends Component {
         <td>{exercise.duration}</td>
         <td>{exercise.calories}</td>
         <td>
-          <Link to={"/edit/" + exercise._id}>edit</Link>|{" "}
+          <Link to={"/edit/" + exercise._id} style={{textDecoration: 'none',}}>edit&nbsp;</Link>|{" "}
           <a
             href="#"
             onClick={() => {
               this.deleteExercise(exercise._id);
             }}
+            style={{textDecoration: 'none',}}
           >
             delete
           </a>{" "}
@@ -130,15 +133,14 @@ class UserDetaills extends Component {
     });
   }
 
-  render() {
+  render(){ 
+    try{
+      AssertionComponent(this.props.username, "User not logged in");
     return (
       <div>
-        <a 
-            href="#"
-            onClick={() => {this.signOut()}}
-          >sign out</a>
+        <h3 style={{ textAlign: 'right' }}> <span >calories goal completed:{this.state.user.calgoal_completed}/{this.state.user.calgoal}</span> &nbsp;&nbsp;&nbsp;&nbsp;<a href="#" onClick={() => {this.signOut()}} style={{textDecoration: 'none',}}>sign out</a></h3>
         <h1>{this.props.username}'s schedule:</h1>
-        <h3 style={{ textAlign: 'right' }}>calories goal completed:{this.state.user.calgoal_completed}/{this.state.user.calgoal} <Link to={"/create/"}>➕</Link></h3>
+        <div style={{ textAlign: 'right',}}><Link to={"/create/"} title="Add Exercise" style={{textDecoration: 'none',}}>➕</Link></div>
         <table className="table">
           <thead className="thead-light">
             <tr>
@@ -153,7 +155,10 @@ class UserDetaills extends Component {
         </table>
       </div>
     );
+  }catch(e){
+    console.log("error is", e)
   }
+}
 }
 
 export default UserDetaills;

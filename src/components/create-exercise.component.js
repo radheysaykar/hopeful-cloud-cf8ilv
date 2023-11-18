@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import api from "../api/posts.js";
+import { AssertionComponent } from '../function.js';
 
 export default class CreateExercise extends Component {
   constructor(props) {
@@ -18,6 +19,7 @@ export default class CreateExercise extends Component {
   }
 
   async componentDidMount() {
+    AssertionComponent(this.props.username, "User not logged in");
     this.setState({
       username: this.props.username,
     });

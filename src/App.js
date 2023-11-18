@@ -8,6 +8,7 @@ import UserDetails from "./components/user-details.component";
 import LoginSignup from "./components/login-signup.component";
 
 function App() {
+  try{
   const loggedin_username = localStorage.getItem('username');
 
   if(loggedin_username){
@@ -36,6 +37,11 @@ function App() {
       </div>
     );
   }      
+}
+catch{
+  console.error('An error occurred:', error.message);
+}
+
 }
 
 export default App;

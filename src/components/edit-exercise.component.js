@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { useParams } from "react-router-dom";
 import api from "../api/posts.js";
+import { AssertionComponent } from '../function.js';
 
 class EditExercise extends Component {
   constructor(props) {
@@ -19,6 +20,7 @@ class EditExercise extends Component {
   }
 
   componentDidMount() {
+    
     console.log(" this.props.id ", String(this.props.id.id));
     this.setState({
       username: this.props.username,
@@ -129,6 +131,7 @@ class EditExercise extends Component {
 }
 
 const ParentEditExercise = (props) => {
+  AssertionComponent(this.props.username, "User not logged in");
   return <EditExercise id={useParams()} username={props.username}/>;
 };
 

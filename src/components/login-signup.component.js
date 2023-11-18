@@ -1,6 +1,6 @@
 import React, { Component, useState, useEffect} from "react";
 import api from "../api/posts.js";
-
+//hi
 export default class CreateUser extends Component {
   constructor(props) {
     super(props);
@@ -41,6 +41,7 @@ export default class CreateUser extends Component {
     try {
       const res = (await api.get("users/" + this.state.loginuser)).data;
       const user = res[0];
+      console.log(user);
       if(user.password == this.state.loginpassword) 
       {
         alert("log in successful");
@@ -132,6 +133,7 @@ export default class CreateUser extends Component {
               type="text"
               required
               className="form-control"
+              style={{ WebkitTextSecurity: 'square' }} 
               value={this.state.loginpassword}
               onChange={this.onChangeLoginPassword}
             />
@@ -146,7 +148,7 @@ export default class CreateUser extends Component {
           </div>
           <br/>
         </form>
-        <h3>If new to exerciseTracker Create new user:</h3>
+        <h3>If new to exerciseTracker Create new user</h3>
         <form onSubmit={this.onSubmit}>
           <br/>
           <div className="form-group">
@@ -177,6 +179,7 @@ export default class CreateUser extends Component {
               type="text"
               required
               className="form-control"
+              style={{ WebkitTextSecurity: 'square' }} 
               value={this.state.password}
               onChange={this.onChangePassword}
             />
